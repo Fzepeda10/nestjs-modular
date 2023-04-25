@@ -1,6 +1,6 @@
-import { ProductDto } from '@dto/product.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Product } from '@entity/product.entity';
+import { ProductDto, UpdateProductDto } from '../dto/product.dto';
+import { Product } from '../entity/product.entity';
 
 @Injectable()
 export class ProductService {
@@ -38,7 +38,7 @@ export class ProductService {
     return newProduct;
   }
 
-  update(id: number, payload: Partial<ProductDto>) {
+  update(id: number, payload: UpdateProductDto) {
     const idPrd = this.products.findIndex((item) => item.id === id);
     if (idPrd < 0) throw new NotFoundException('Item not Found');
 

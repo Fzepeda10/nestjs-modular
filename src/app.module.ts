@@ -1,30 +1,30 @@
 import { Module } from '@nestjs/common';
-import { AppService } from './app.service';
-import { ProductsController } from './controllers/products.controller';
-import { CategoriesController } from './controllers/categories.controller';
-import { UserController } from './controllers/user.controller';
-import { OrderController } from './controllers/order.controller';
-import { BrandController } from './controllers/brand.controller';
-import { CustomerController } from './controllers/customer.controller';
-import { ProductService } from './service/product.service';
-import { BrandService } from './service/brand.service';
-import { CategoryService } from './service/category.service';
-import { CustomerService } from './service/customer.service';
-import { OrderService } from './service/order.service';
-import { UserService } from './service/user.service';
+import { ConfigModule } from '@nestjs/config';
+import * as Joi from 'joi';
 
+import { UsersModule } from './modules/users/users.module';
+import { ProductsModule } from './modules/products/products.module';
+import { DatabaseModule } from './database/database.module';
+import { environments } from './environments';
+import config from './config';
+/* 
+$env:NODE_ENV = 'prod'; npm run start:dev
+*/
 @Module({
-  imports: [],
-  controllers: [
-    ProductsController,
-    CategoriesController,
-    UserController,
-    OrderController,
-    BrandController,
-    CustomerController,
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: environments[process.env.NODE_ENV] || '.env',
+      isGlobal: true,
+      load: [config],
+      validationSchema: Joi.object({
+        API_KEY: Joi.number().required(),
+        DATABASE_NAME: Joi.string().required(),
+        DATABASE_PORT: Joi.number().required(),
+      }),
+    }),
+    UsersModule,
+    ProductsModule,
+    DatabaseModule,
   ],
-  providers: [AppService, ProductService, BrandService, CategoryService, CustomerService, OrderService, UserService],
 })
-export class AppModule {
-  /*  */
-}
+export class AppModule {}
