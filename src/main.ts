@@ -5,7 +5,7 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: ['warn', 'error', 'verbose'],
+    logger: ['warn', 'error', 'log', 'verbose'],
   });
   app.useGlobalPipes(
     new ValidationPipe({
